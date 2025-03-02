@@ -1,27 +1,88 @@
-
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { dataRoute } from './routes/data'
 import { controlRoute } from './routes/control'
 
-const app = new OpenAPIHono()
+// Cloudflare D1の型定義
+type Bindings = {
+  DB: D1Database;
+}
 
-app.openapi(dataRoute, (c) => {
-  const { apiKey, email } = c.req.valid('json')
-  // write to Cloudflare d1
-  // send an email
-  return c.json({
-    message: "success"
-  })
+const app = new OpenAPIHono<{ Bindings: Bindings }>()
+
+// データ登録ルート（ウェイトリストへのメールアドレス登録）
+app.openapi(dataRoute, async (c) => {
+  try {
+    const { apiKey, email } = c.req.valid('json')
+
+    // APIキーの存在確認
+    const { results: apiKeyResults } = await c.env.DB.prepare(
+      "SELECT api_key FROM api_keys WHERE api_key = ?"
+    )
+      .bind(apiKey)
+      .all()
+
+    if (apiKeyResults.length === 0) {
+      return c.json({
+        message: "Invalid API key"
+      }, 400)
+    }
+
+    try {
+      // waitlistテーブルにデータを挿入
+      await c.env.DB.prepare(
+        "INSERT INTO waitlist (api_key, email) VALUES (?, ?)"
+      )
+        .bind(apiKey, email)
+        .run()
+    } catch (dbError) {
+      // 一意性制約違反などのDBエラーを処理
+      if (dbError instanceof Error && dbError.message.includes('UNIQUE constraint failed')) {
+        return c.json({
+          message: "This email is already registered for this API key"
+        }, 400)
+      }
+      throw dbError // その他のDBエラーは再スロー
+    }
+
+    // send an email (この部分は実装しない)
+
+    return c.json({
+      message: "success"
+    })
+  } catch (error) {
+    console.error("Error in dataRoute:", error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    return c.json({
+      message: "An error occurred",
+      error: errorMessage
+    }, 500)
+  }
 })
 
+// コントロールルート（新しいAPIキーの生成）
+app.openapi(controlRoute, async (c) => {
+  try {
+    const { userId } = c.req.valid('json')
+    const apiKey = crypto.randomUUID()
 
-app.openapi(controlRoute, (c) => {
-  const { userId } = c.req.valid('json')
-  const apiKey = crypto.randomUUID()
-  // write apikey to Cloudflare d1
-  return c.json({
-    apiKey: apiKey
-  })
+    // api_keysテーブルにデータを挿入
+    await c.env.DB.prepare(
+      "INSERT INTO api_keys (user_id, api_key) VALUES (?, ?)"
+    )
+      .bind(userId, apiKey)
+      .run()
+
+    return c.json({
+      apiKey: apiKey
+    }, 200)
+  } catch (error) {
+    console.error("Error in controlRoute:", error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    return c.json({
+      message: "An error occurred",
+      error: errorMessage
+    }, 500)
+  }
 })
 
 // The OpenAPI documentation will be available at /doc

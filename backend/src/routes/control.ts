@@ -1,13 +1,23 @@
 import { z } from '@hono/zod-openapi'
 import { createRoute } from '@hono/zod-openapi'
+
+// リクエストボディのスキーマ
 const BodySchema = z.object({
-    userId: z.string(),
+    userId: z.string().min(1),
 })
 
+// 成功レスポンスのスキーマ
 const ResponseSchema = z.object({
     apiKey: z.string()
 })
 
+// エラーレスポンスのスキーマ
+const ErrorResponseSchema = z.object({
+    message: z.string(),
+    error: z.string().optional()
+})
+
+// OpenAPIルート定義
 export const controlRoute = createRoute({
     method: 'post',
     path: '/apiKey/new',
@@ -27,7 +37,18 @@ export const controlRoute = createRoute({
                     schema: ResponseSchema,
                 },
             },
-            description: 'Retrieve the user',
+            description: 'Successfully generated API key',
+        },
+        500: {
+            content: {
+                'application/json': {
+                    schema: ErrorResponseSchema,
+                },
+            },
+            description: 'Server error',
         },
     },
 })
+
+// エクスポートしてindex.tsで使用できるようにする
+export { ResponseSchema, ErrorResponseSchema }
