@@ -2,6 +2,7 @@ import { OpenAPIHono } from '@hono/zod-openapi'
 import { dataRoute } from './routes/data'
 import { controlRoute } from './routes/control'
 import { listRoute } from './routes/list'
+import { cors } from 'hono/cors'
 
 // Cloudflare D1の型定義
 type Bindings = {
@@ -9,6 +10,8 @@ type Bindings = {
 }
 
 const app = new OpenAPIHono<{ Bindings: Bindings }>()
+
+app.use('/*', cors())
 
 // データ登録ルート（ウェイトリストへのメールアドレス登録）
 app.openapi(dataRoute, async (c) => {
@@ -132,5 +135,7 @@ app.doc('/doc', {
     title: 'My API',
   },
 })
+
+
 
 export default app

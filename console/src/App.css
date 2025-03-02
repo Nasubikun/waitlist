@@ -1,0 +1,315 @@
+/* 全体のレイアウト */
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* ダッシュボード */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.dashboard-header {
+  background-color: #2c3e50;
+  color: white;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.subtitle {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.dashboard-content {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.dashboard-footer {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #6c757d;
+  border-top: 1px solid #e9ecef;
+}
+
+/* 認証コンテナ */
+.auth-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input {
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* 認証済みコンテンツ */
+.authenticated-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* APIキー管理 */
+.api-key-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.user-info,
+.api-key-display {
+  margin-bottom: 1.5rem;
+}
+
+.api-key-value {
+  display: flex;
+  margin-top: 0.5rem;
+}
+
+.api-key-value input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px 0 0 4px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  background-color: #f8f9fa;
+}
+
+.copy-button {
+  padding: 0.75rem 1rem;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+.copy-button:hover {
+  background-color: #5a6268;
+}
+
+.api-key-info {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-top: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ウェイトリストテーブル */
+.waitlist-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.waitlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.waitlist-header h3 {
+  margin: 0;
+}
+
+.refresh-button {
+  padding: 0.5rem 1rem;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.refresh-button:hover {
+  background-color: #5a6268;
+}
+
+.test-form {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border-left: 4px solid #17a2b8;
+}
+
+.test-form h4 {
+  margin-top: 0;
+  color: #17a2b8;
+}
+
+.add-email-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.add-email-form input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.waitlist-table-container {
+  overflow-x: auto;
+}
+
+.waitlist-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.waitlist-table th,
+.waitlist-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.waitlist-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.waitlist-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.no-data,
+.loading {
+  padding: 2rem;
+  text-align: center;
+  color: #6c757d;
+}
+
+/* ボタンスタイル */
+.primary-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.primary-button:hover {
+  background-color: #2980b9;
+}
+
+.secondary-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #e9ecef;
+  color: #495057;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.secondary-button:hover {
+  background-color: #dee2e6;
+}
+
+/* メッセージスタイル */
+.error-message {
+  color: #dc3545;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.success-message {
+  color: #28a745;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .dashboard-content {
+    padding: 1rem;
+  }
+
+  .api-key-value {
+    flex-direction: column;
+  }
+
+  .api-key-value input {
+    border-radius: 4px;
+  }
+
+  .copy-button {
+    margin-top: 0.5rem;
+    border-radius: 4px;
+  }
+
+  .add-email-form {
+    flex-direction: column;
+  }
+
+  .add-email-form button {
+    margin-top: 0.5rem;
+  }
+}
