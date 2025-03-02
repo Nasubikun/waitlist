@@ -2,6 +2,7 @@ import { OpenAPIHono } from '@hono/zod-openapi'
 import { dataRoute } from './routes/data'
 import { controlRoute } from './routes/control'
 import { listRoute } from './routes/list'
+import { apiKeysListRoute } from './routes/apikeys'
 import { cors } from 'hono/cors'
 
 // Cloudflare D1の型定義
@@ -119,6 +120,30 @@ app.openapi(listRoute, async (c) => {
     }, 200)
   } catch (error) {
     console.error("Error in listRoute:", error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    return c.json({
+      message: "An error occurred",
+      error: errorMessage
+    }, 500)
+  }
+})
+// APIキー一覧ルート
+app.openapi(apiKeysListRoute, async (c) => {
+  try {
+    const { userId } = c.req.valid('json')
+
+    // ユーザーIDに紐づくAPIキーを取得
+    const { results: apiKeys } = await c.env.DB.prepare(
+      "SELECT api_key, created_at FROM api_keys WHERE user_id = ? ORDER BY created_at DESC"
+    )
+      .bind(userId)
+      .all()
+
+    return c.json({
+      apiKeys: apiKeys as { created_at: string; api_key: string }[]
+    }, 200)
+  } catch (error) {
+    console.error("Error in apiKeysListRoute:", error)
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     return c.json({
       message: "An error occurred",
