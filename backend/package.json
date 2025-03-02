@@ -2,7 +2,9 @@
   "name": "backend",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify"
+    "deploy": "wrangler deploy --minify",
+    "migrate-dev": "npx wrangler d1 execute waitlist --local --file=./schema.sql",
+    "migrate-prod": "npx wrangler d1 execute waitlist --remote --file=./schema.sql"
   },
   "dependencies": {
     "@hono/zod-openapi": "^0.19.0",

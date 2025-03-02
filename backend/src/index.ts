@@ -8,6 +8,7 @@ const app = new OpenAPIHono()
 app.openapi(dataRoute, (c) => {
   const { apiKey, email } = c.req.valid('json')
   // write to Cloudflare d1
+  // send an email
   return c.json({
     message: "success"
   })
