@@ -10,6 +10,7 @@ const WaitlistTable = ({ apiKey }: WaitlistTableProps) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [newEmail, setNewEmail] = useState('');
+    const [newNote, setNewNote] = useState('');
     const [isAdding, setIsAdding] = useState(false);
     const [addSuccess, setAddSuccess] = useState<string | null>(null);
 
@@ -47,9 +48,10 @@ const WaitlistTable = ({ apiKey }: WaitlistTableProps) => {
         setAddSuccess(null);
 
         try {
-            const message = await registerToWaitlist(apiKey, newEmail);
+            const message = await registerToWaitlist(apiKey, newEmail, newNote);
             setAddSuccess(message);
             setNewEmail('');
+            setNewNote('');
             // 登録成功後にリストを更新
             fetchUsers();
         } catch (err) {
@@ -91,6 +93,13 @@ const WaitlistTable = ({ apiKey }: WaitlistTableProps) => {
                         placeholder="メールアドレスを入力"
                         disabled={isAdding}
                     />
+                    <input
+                        type="text"
+                        value={newNote}
+                        onChange={(e) => setNewNote(e.target.value)}
+                        placeholder="備考（オプション）"
+                        disabled={isAdding}
+                    />
                     <button type="submit" disabled={isAdding} className="primary-button">
                         {isAdding ? '登録中...' : '登録'}
                     </button>
@@ -108,6 +117,7 @@ const WaitlistTable = ({ apiKey }: WaitlistTableProps) => {
                         <thead>
                             <tr>
                                 <th>メールアドレス</th>
+                                <th>備考</th>
                                 <th>登録日時</th>
                             </tr>
                         </thead>
@@ -115,6 +125,7 @@ const WaitlistTable = ({ apiKey }: WaitlistTableProps) => {
                             {users.map((user, index) => (
                                 <tr key={index}>
                                     <td>{user.email}</td>
+                                    <td>{user.note || '-'}</td>
                                     <td>{formatDate(user.created_at)}</td>
                                 </tr>
                             ))}

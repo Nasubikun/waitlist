@@ -15,6 +15,7 @@ CREATE TABLE waitlist (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   api_key TEXT NOT NULL,
   email TEXT NOT NULL,
+  note TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (api_key) REFERENCES api_keys(api_key),
   UNIQUE (api_key, email)

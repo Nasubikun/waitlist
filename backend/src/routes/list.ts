@@ -11,6 +11,7 @@ const ResponseSchema = z.object({
     users: z.array(
         z.object({
             email: z.string(),
+            note: z.string().nullable(),
             created_at: z.string()
         })
     )

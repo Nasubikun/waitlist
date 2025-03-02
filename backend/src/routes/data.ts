@@ -2,7 +2,8 @@ import { z } from '@hono/zod-openapi'
 import { createRoute } from '@hono/zod-openapi'
 const BodySchema = z.object({
     apiKey: z.string(),
-    email: z.string().email()
+    email: z.string().email(),
+    note: z.string().optional()
 })
 
 const ResponseSchema = z.object({

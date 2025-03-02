@@ -29,6 +29,7 @@ export const generateApiKey = async (userId: string): Promise<string> => {
 // ウェイトリストのユーザー情報
 export interface WaitlistUser {
     email: string;
+    note: string | null;
     created_at: string;
 }
 
@@ -56,14 +57,14 @@ export const getWaitlistUsers = async (apiKey: string): Promise<WaitlistUser[]> 
 };
 
 // メールアドレスをウェイトリストに登録する（テスト用）
-export const registerToWaitlist = async (apiKey: string, email: string): Promise<string> => {
+export const registerToWaitlist = async (apiKey: string, email: string, note?: string): Promise<string> => {
     try {
         const response = await fetch(`${API_BASE_URL}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ apiKey, email }),
+            body: JSON.stringify({ apiKey, email, note }),
         });
 
         if (!response.ok) {

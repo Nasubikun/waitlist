@@ -16,7 +16,7 @@ app.use('/*', cors())
 // データ登録ルート（ウェイトリストへのメールアドレス登録）
 app.openapi(dataRoute, async (c) => {
   try {
-    const { apiKey, email } = c.req.valid('json')
+    const { apiKey, email, note } = c.req.valid('json')
 
     // APIキーの存在確認
     const { results: apiKeyResults } = await c.env.DB.prepare(
@@ -34,9 +34,9 @@ app.openapi(dataRoute, async (c) => {
     try {
       // waitlistテーブルにデータを挿入
       await c.env.DB.prepare(
-        "INSERT INTO waitlist (api_key, email) VALUES (?, ?)"
+        "INSERT INTO waitlist (api_key, email, note) VALUES (?, ?, ?)"
       )
-        .bind(apiKey, email)
+        .bind(apiKey, email, note || null)
         .run()
     } catch (dbError) {
       // 一意性制約違反などのDBエラーを処理
@@ -109,13 +109,13 @@ app.openapi(listRoute, async (c) => {
 
     // ウェイトリストのユーザーを取得
     const { results: waitlistUsers } = await c.env.DB.prepare(
-      "SELECT email, created_at FROM waitlist WHERE api_key = ? ORDER BY created_at DESC"
+      "SELECT email, note, created_at FROM waitlist WHERE api_key = ? ORDER BY created_at DESC"
     )
       .bind(apiKey)
       .all()
 
     return c.json({
-      users: waitlistUsers as { email: string; created_at: string }[]
+      users: waitlistUsers as { email: string; note: string | null; created_at: string }[]
     }, 200)
   } catch (error) {
     console.error("Error in listRoute:", error)
