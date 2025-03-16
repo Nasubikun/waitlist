@@ -1,7 +1,7 @@
 // APIとの通信を行うサービス
 
 // APIのベースURL（実際の環境に合わせて変更してください）
-const API_BASE_URL = 'http://localhost:8787';
+const API_BASE_URL = 'https://waitlist.yasan.uk';
 
 // APIキーを生成する
 export const generateApiKey = async (userId: string): Promise<string> => {
