@@ -3,6 +3,35 @@
 // APIのベースURL（実際の環境に合わせて変更してください）
 const API_BASE_URL = 'https://waitlist.yasan.uk';
 
+// APIキー情報のインターフェース
+export interface ApiKeyInfo {
+    api_key: string;
+    created_at: string;
+}
+
+// APIキー一覧を取得する
+export const getApiKeys = async (userId: string): Promise<ApiKeyInfo[]> => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/apiKey/list`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId }),
+        });
+
+        if (!response.ok) {
+            throw new Error('APIキーの取得に失敗しました');
+        }
+
+        const data = await response.json();
+        return data.apiKeys;
+    } catch (error) {
+        console.error('APIキー取得エラー:', error);
+        throw error;
+    }
+};
+
 // APIキーを生成する
 export const generateApiKey = async (userId: string): Promise<string> => {
     try {
