@@ -1,11 +1,10 @@
 import { useState, FormEvent } from 'react';
-import { generateApiKey } from '../services/api';
 
 interface UserAuthProps {
-    onApiKeyGenerated: (userId: string, apiKey: string) => void;
+    onUserAuthenticated: (userId: string) => void;
 }
 
-const UserAuth = ({ onApiKeyGenerated }: UserAuthProps) => {
+const UserAuth = ({ onUserAuthenticated }: UserAuthProps) => {
     const [userId, setUserId] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -22,8 +21,9 @@ const UserAuth = ({ onApiKeyGenerated }: UserAuthProps) => {
         setError(null);
 
         try {
-            const apiKey = await generateApiKey(userId);
-            onApiKeyGenerated(userId, apiKey);
+            // APIキーを生成する代わりに、ユーザーIDを親コンポーネントに通知するだけ
+            // APIキーの一覧は親コンポーネントでApiKeyListコンポーネントを使って表示する
+            onUserAuthenticated(userId);
         } catch (err) {
             setError(err instanceof Error ? err.message : '不明なエラーが発生しました');
         } finally {
@@ -34,7 +34,7 @@ const UserAuth = ({ onApiKeyGenerated }: UserAuthProps) => {
     return (
         <div className="auth-container">
             <h2>ウェイトリストコンソール</h2>
-            <p>ユーザーIDを入力してAPIキーを生成してください</p>
+            <p>ユーザーIDを入力してログインしてください</p>
 
             <form onSubmit={handleSubmit} className="auth-form">
                 <div className="form-group">
@@ -52,7 +52,7 @@ const UserAuth = ({ onApiKeyGenerated }: UserAuthProps) => {
                 {error && <div className="error-message">{error}</div>}
 
                 <button type="submit" disabled={isLoading} className="primary-button">
-                    {isLoading ? 'ロード中...' : 'APIキーを生成'}
+                    {isLoading ? 'ロード中...' : 'ログイン'}
                 </button>
             </form>
         </div>

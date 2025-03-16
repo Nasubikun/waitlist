@@ -4,9 +4,10 @@ interface ApiKeyManagerProps {
     userId: string;
     apiKey: string;
     onLogout: () => void;
+    onBackToList: () => void;
 }
 
-const ApiKeyManager = ({ userId, apiKey, onLogout }: ApiKeyManagerProps) => {
+const ApiKeyManager = ({ userId, apiKey, onLogout, onBackToList }: ApiKeyManagerProps) => {
     const [isCopied, setIsCopied] = useState(false);
 
     const copyToClipboard = () => {
@@ -51,6 +52,9 @@ const ApiKeyManager = ({ userId, apiKey, onLogout }: ApiKeyManagerProps) => {
             </div>
 
             <div className="actions">
+                <button onClick={onBackToList} className="primary-button">
+                    APIキー一覧に戻る
+                </button>
                 <button onClick={onLogout} className="secondary-button">
                     ログアウト
                 </button>
